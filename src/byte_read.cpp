@@ -1,13 +1,12 @@
 #include <cctype>
 #include <cstdio>
+
 #include <fstream>
 #include <iostream>
 #include <string>
 #include <vector>
 
-using std::cin;
-using std::cout;
-using std::endl;
+#include "color.h"
 
 void PutLine(const std::vector<uint8_t> &line) {
     printf("  |  ");
@@ -15,15 +14,20 @@ void PutLine(const std::vector<uint8_t> &line) {
         if (std::isprint(c)) {
             printf("%c", c);
         } else {
-            printf("*");
+            color::Print(color::kGray, ".");
         }
     }
 }
 
 int main(int argc, char **argv) {
-    std::ifstream ifs(argv[1], std::ios::in | std::ios::binary);
+
+    std::string file_name = argv[1];
+
     int line_width = 16;
     if (argc >= 3) { line_width = std::stoi(argv[2]); }
+
+    std::ifstream ifs(file_name, std::ios::in | std::ios::binary);
+
     uint8_t c;
     int cnt = 0;
     std::vector<uint8_t> line;
@@ -33,7 +37,7 @@ int main(int argc, char **argv) {
         if (++cnt % line_width == 0) {
             PutLine(line);
             line.clear();
-            cout << endl;
+            putchar('\n');
         }
     }
     if (!line.empty()) {
@@ -42,6 +46,6 @@ int main(int argc, char **argv) {
         PutLine(line);
     }
 
-    cout << endl;
+    putchar('\n');
     return 0;
 }
